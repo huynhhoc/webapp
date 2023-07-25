@@ -8,16 +8,16 @@ Welcome to our simple eCommerce website! This website is built using the Model-V
 Our simple eCommerce website is designed to showcase the basic functionalities of an online store. Users can browse through a list of products on the Home page and, if granted administrative privileges, manage (Create, Read, Update, Delete) products through the Admin page.
 Features
 
-    * Home Page: Displays a list of available products for users to browse.
-    * Admin Page: Enables authorized users to perform CRUD operations on products (Create, Read, Update, Delete).
+    Home Page: Displays a list of available products for users to browse.
+    Admin Page: Enables authorized users to perform CRUD operations on products (Create, Read, Update, Delete).
 
 # Database Setup
 
 Our website utilizes a database to store and manage product information. To set up the database, we use Entity Framework's migration system. Follow the steps below to migrate the database:
 
-    * Open the Package Manager Console:
+    Open the Package Manager Console:
 
-    * mathematica
+    mathematica
 
 Tools > NuGet Package Manager > Package Manager Console
 
@@ -41,17 +41,17 @@ Running the Application
 
 To run the eCommerce website locally, follow these steps:
 
-    * Clone this repository to your local machine.
+    Clone this repository to your local machine.
 
-    * Open the project in your preferred Integrated Development Environment (IDE) that supports .NET development.
+    Open the project in your preferred Integrated Development Environment (IDE) that supports .NET development.
 
-    * Build the solution to restore NuGet packages and compile the code.
+    Build the solution to restore NuGet packages and compile the code.
 
-    * Set the startup project to the main web application.
+    Set the startup project to the main web application.
 
-    * Run the application by pressing F5 or using the "Start Debugging" option.
+    Run the application by pressing F5 or using the "Start Debugging" option.
 
-    * Access the website through your preferred web browser at: http://localhost:<port>/ (replace <port> with the port number shown in your IDE).
+    Access the website through your preferred web browser at: http://localhost:<port>/ (replace <port> with the port number shown in your IDE).
 
 # Contributing
 
