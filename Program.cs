@@ -12,7 +12,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite("Data Source=app.db");
 });
-
+// Register IAppDbContext with the AppDbContext implementation
+builder.Services.AddScoped<IAppDbContext, AppDbContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

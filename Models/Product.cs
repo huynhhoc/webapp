@@ -11,13 +11,21 @@ namespace webapp.Models
 
         public decimal Price { get; set; }
     }
-    public class AppDbContext : DbContext
+    // Interface for the AppDbContext
+    public interface IAppDbContext
     {
+        DbSet<Product> Products { get; }
+        // Add other DbSet properties and IDbSet methods here if needed.
+    }
+
+    public class AppDbContext : DbContext, IAppDbContext
+    {
+        public DbSet<Product> Products { get; set; }
         // Add a constructor that accepts DbContextOptions
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        public DbSet<Product> Products { get; set;}
+        //public DbSet<Product> Products { get; set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

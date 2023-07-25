@@ -8,9 +8,9 @@ namespace webapp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly AppDbContext _context;
+        private readonly IAppDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, AppDbContext context)
+        public HomeController(ILogger<HomeController> logger, IAppDbContext context)
         {
             _logger = logger;
             _context = context;
