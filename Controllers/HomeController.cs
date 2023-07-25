@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using webapp.Models;
 
@@ -33,7 +34,11 @@ namespace webapp.Controllers
             List<Product> products = _context.Products.ToList();
             return View(products);
         }
-
+        // Action method to display the AddToCart view
+        public IActionResult AddToCartView()
+        {
+            return View("AddToCart");
+        }
         // Action method to add a product to the shopping cart
         public ActionResult AddToCart(int id)
         {
@@ -42,6 +47,7 @@ namespace webapp.Controllers
             var product = _context.Products.Find(id);
             if (product != null)
             {
+                AddToCartInTempData(product);
                 ViewBag.Message = $"Added {product.Name} to the cart.";
             }
             else
@@ -49,7 +55,23 @@ namespace webapp.Controllers
                 ViewBag.Message = "Product not found.";
             }
             List<Product> products = _context.Products.ToList();
+            var serializedCart = JsonConvert.SerializeObject(GetCartFromTempData());
+            TempData["Cart"] = serializedCart; // Store the serialized cart
+
             return View("Index", products);
+        }
+         private List<Product> GetCartFromTempData()
+        {
+            var serializedCart = TempData["Cart"] as string;
+            return string.IsNullOrEmpty(serializedCart) ? new List<Product>() : JsonConvert.DeserializeObject<List<Product>>(serializedCart);
+        }
+
+
+        private void AddToCartInTempData(Product product)
+        {
+            var cart = GetCartFromTempData();
+            cart.Add(product);
+            TempData["Cart"] = cart;
         }
     }
 }
