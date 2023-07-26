@@ -63,7 +63,7 @@ namespace webapp.Controllers
         }
         // Action method to handle the form submission
         [HttpPost]
-        public IActionResult Search(int id)
+        public IActionResult Details(int id)
         {
             // Find the product by ID from the database
             var product = _context.Products.FirstOrDefault(p => p.Id == id);
