@@ -28,8 +28,6 @@ Our website utilizes a database to store and manage product information. To set 
 
     Open the Package Manager Console:
 
-    mathematica
-
 Tools > NuGet Package Manager > Package Manager Console
 
 Run the following command to scaffold the initial migration:
