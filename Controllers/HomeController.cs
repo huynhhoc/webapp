@@ -35,11 +35,6 @@ namespace webapp.Controllers
             return View(products);
         }
         // Action method to display the AddToCart view
-        public IActionResult AddToCartView()
-        {
-            var cart = GetCartFromSession();
-            return View("AddToCart", cart);
-        }
         public IActionResult ViewCart()
         {
             var cart = GetCartFromSession();
@@ -84,8 +79,5 @@ namespace webapp.Controllers
             var cart = HttpContext.Session.GetString("Cart");
             return string.IsNullOrEmpty(cart) ? new List<Product>() : JsonConvert.DeserializeObject<List<Product>>(cart);
         }
-
-
-
     }
 }
