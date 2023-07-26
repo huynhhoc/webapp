@@ -24,6 +24,11 @@
                     <span>@product.Name</span>
                     <span class="badge badge-primary badge-pill text-center">@product.Price</span>
                     <a href="@Url.Action("AddToCart", "Home", new { id = product.Id })" class="btn btn-primary">Add to Cart</a>
+                    <!-- "Search" button -->
+                    <form action="@Url.Action("Search", "Home")" method="post">
+                        <input type="hidden" name="id" value="@product.Id" />
+                        <button type="submit" class="btn btn-primary">Details...</button>
+                    </form>
                 </li>
             }
         </ul>

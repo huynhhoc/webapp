@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>API Page</title>
+    <!-- Add Bootstrap CSS link here -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>API Page</h1>
+        <div id="productInfo"></div>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery scripts here -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Get the product ID from the URL query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            // Make API call to fetch product information
+            const apiUrl = `https://localhost:7179/api/products/${productId}`;
+            $.ajax({
+                url: apiUrl,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    displayProductInfo(data);
+                },
+                error: function () {
+                    alert('Error fetching product information. Please try again.');
+                }
+            });
+
+            function displayProductInfo(product) {
+                const productInfoDiv = $("#productInfo");
+
+                if (product) {
+                    productInfoDiv.html(`
+                                <h3>Product Information</h3>
+                                <p><strong>Name:</strong> ${product.name}</p>
+                                <p><strong>Price:</strong> ${product.price}</p>
+                                <p><strong>Description:</strong> ${product.description}</p>
+                            `);
+                } else {
+                    productInfoDiv.html('<p>Product not found.</p>');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

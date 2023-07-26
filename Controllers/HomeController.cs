@@ -60,6 +60,25 @@ namespace webapp.Controllers
             List<Product> products = _context.Products.ToList();
             return View("Index", products);
         }
+        // Action method to handle the form submission
+        [HttpPost]
+        public IActionResult Search(int id)
+        {
+            // Find the product by ID from the database
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+
+            if (product != null)
+            {
+                // If product found, redirect to the SearchResults page with product information
+                return View("SearchResults", product);
+            }
+            else
+            {
+                // If product not found, redirect back to the Index page with an error message
+                TempData["ErrorMessage"] = "Product not found.";
+                return RedirectToAction("Index");
+            }
+        }
         private void AddToCartInSession(Product product)
         {
             var cart = GetCartFromSession();
