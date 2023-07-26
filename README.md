@@ -8,18 +8,15 @@ Welcome to our simple eCommerce website! This website is built using the Model-V
 Our simple eCommerce website is designed to showcase the basic functionalities of an online store. Users can browse through a list of products on the Home page and, if granted administrative privileges, manage (Create, Read, Update, Delete) products through the Admin page.
 Features
 
-    Home Page: Displays a list of available products for users to browse.
-    Admin Page: Enables authorized users to perform CRUD operations on products (Create, Read, Update, Delete).
-
-Admin Page
+Admin: Enables authorized users to perform CRUD operations on products (Create, Read, Update, Delete).
 
 <img align="center" width="600"  src="./Images/admin.jpg">
 
-Home Page
+Home Page: Displays a list of available products for users to browse.
 
 <img align="center" width="600"  src="./Images/homepage.jpg">
 
-ViewCart Page
+ViewCart Page: Displays a list of selected products
 
 <img align="center" width="600"  src="./Images/viewcart.jpg">
 
