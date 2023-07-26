@@ -23,7 +23,6 @@ Tools > NuGet Package Manager > Package Manager Console
 
 Run the following command to scaffold the initial migration:
 
-sql
 ```
 
 Add-Migration InitialCreate
@@ -32,7 +31,6 @@ Add-Migration InitialCreate
 
 Apply the migration to create the database:
 
-mathematica
 ```
     Update-Database
 ```
