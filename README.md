@@ -1,4 +1,4 @@
-# Simple eCommerce Website README
+# Simple eCommerce Website
 
 Welcome to our simple eCommerce website! This website is built using the Model-View-Controller (MVC) architecture, making it easy to manage and organize different aspects of the application. Below, we'll provide an overview of the website's structure, database setup, and instructions on how to get started.
 
