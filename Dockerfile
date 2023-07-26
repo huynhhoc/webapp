@@ -1,30 +1,25 @@
-# Set the base image to use for the container
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-# Set the working directory in the container
+#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
+#For more information, please see https://aka.ms/containercompat
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
-# Copy the .csproj and .sln files to the container
-COPY *.csproj .
-COPY *.sln .
-
-# Restore the NuGet packages
-RUN dotnet restore
-
-# Copy the rest of the source code to the container
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["webapp.csproj", "."]
+RUN dotnet restore "./webapp.csproj"
 COPY . .
+WORKDIR "/src/."
+RUN dotnet build "webapp.csproj" -c Release -o /app/build
 
-# Build the application
-RUN dotnet publish -c Release -o out
+FROM build AS publish
+RUN dotnet publish "webapp.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Set the base image to use for the final runtime container
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
-
-# Set the working directory in the container
+FROM base AS final
 WORKDIR /app
-
-# Copy the output files from the build-env container to the final runtime container
-COPY --from=build-env /app/out .
-
-# Set the entry point for the container to start the web application
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "webapp.dll"]
