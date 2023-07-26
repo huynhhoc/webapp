@@ -11,9 +11,9 @@ Features
     Home Page: Displays a list of available products for users to browse.
     Admin Page: Enables authorized users to perform CRUD operations on products (Create, Read, Update, Delete).
 
-<img align="center" width="600"  src="./images/admin.jpg">
-<img align="center" width="600"  src="./images/homepage.jpg">
-<img align="center" width="600"  src="./images/viewcart.jpg">
+<img align="center" width="600"  src="./Images/admin.jpg">
+<img align="center" width="600"  src="./Images/homepage.jpg">
+<img align="center" width="600"  src="./Images/viewcart.jpg">
 
 # Database Setup
 
