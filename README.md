@@ -51,6 +51,85 @@ To run the eCommerce website locally, follow these steps:
 
     Access the website through your preferred web browser at: http://localhost:<port>/ (replace <port> with the port number shown in your IDE).
 
+# API Usage
+
+Our simple eCommerce website provides a RESTful API to retrieve product information based on their unique IDs. The API allows external applications to fetch product details for specific products. To use the API, follow the instructions below:
+API Endpoint
+
+The API endpoint for retrieving product details is:
+
+```
+
+GET /api/products/{id}
+
+```
+## Parameters
+
+    id (required): The unique ID of the product you want to retrieve details for.
+
+## Example
+
+To retrieve the details of a specific product with ID 123, make a GET request to the following URL:
+
+```
+
+http://localhost:<port>/api/products/123
+
+```
+
+Replace <port> with the actual port number where the website is running.
+
+
+## Response
+
+The API will respond with JSON data containing the details of the requested product. The response will include the following information:
+
+    Id: The unique ID of the product.
+    Name: The name of the product.
+    Price: The price of the product.
+
+Here's an example of a JSON response for a product with ID 123:
+
+```
+
+{
+  "Id": 123,
+  "Name": "Product Name",
+  "Price": 19.99
+}
+```
+
+## How to Use the API
+
+To use the API in your application, you can make HTTP GET requests to the API endpoint using your preferred programming language or tool. For example, in JavaScript, you can use the fetch API or libraries like axios to make requests to the API and handle the response data.
+
+Below is an example of how to use the API in JavaScript:
+
+```
+
+const productId = 123;
+const apiUrl = `http://localhost:<port>/api/products/${productId}`;
+
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    // Handle the product data here
+    console.log(data);
+  })
+  .catch(error => {
+    // Handle any errors that occur during the request
+    console.error('Error fetching product:', error);
+  });
+
+```
+Remember to replace <port> with the actual port number where the website is running.
+
+With this API, you can integrate our simple eCommerce website with your own applications or use it as a data source for other projects.
+
+If you have any questions or need further assistance with the API, feel free to contact our support team. Happy coding!
+
+Thank you for using our simple eCommerce website! We hope you find it useful and easy to navigate. Happy shopping!
+
 # Contributing
 
 We welcome contributions to improve and expand the functionality of our simple eCommerce website. If you'd like to contribute, please follow these steps:
