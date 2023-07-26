@@ -11,11 +11,21 @@ Features
     Home Page: Displays a list of available products for users to browse.
     Admin Page: Enables authorized users to perform CRUD operations on products (Create, Read, Update, Delete).
 
+Admin Page
+
 <img align="center" width="600"  src="./Images/admin.jpg">
+
+Home Page
+
 <img align="center" width="600"  src="./Images/homepage.jpg">
+
+ViewCart Page
+
 <img align="center" width="600"  src="./Images/viewcart.jpg">
 
+
 # Database Setup
+
 
 Our website utilizes a database to store and manage product information. To set up the database, we use Entity Framework's migration system. Follow the steps below to migrate the database:
 
