@@ -1,37 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using webapp;
 using webapp.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Autofac.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-// Register the AppDbContext with the dependency injection container and pass the configuration options
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlite("Data Source=app.db");
-});
-// Register IAppDbContext with the AppDbContext implementation
-builder.Services.AddScoped<IAppDbContext, AppDbContext>();
+// Move the services configuration logic to the Startup class
+var startup = new Startup(builder.Configuration);
+startup.ConfigureServices(builder.Services);
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-// Call the custom routing configuration method from the RoutingConfiguration class
-RoutingConfiguration.ConfigureRoutes(app);
+// Move the pipeline configuration logic to the Startup class
+startup.Configure(app, builder.Environment);
 
 app.Run();

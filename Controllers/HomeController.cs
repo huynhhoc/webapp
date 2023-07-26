@@ -37,41 +37,55 @@ namespace webapp.Controllers
         // Action method to display the AddToCart view
         public IActionResult AddToCartView()
         {
-            return View("AddToCart");
+            var cart = GetCartFromSession();
+            return View("AddToCart", cart);
+        }
+        public IActionResult ViewCart()
+        {
+            var cart = GetCartFromSession();
+            return View(cart);
         }
         // Action method to add a product to the shopping cart
-        public ActionResult AddToCart(int id)
+        public IActionResult AddToCart(int id)
         {
-            // In a real-world scenario, you'd handle the shopping cart logic here.
-            // For simplicity, we'll just display a message for now.
             var product = _context.Products.Find(id);
             if (product != null)
             {
-                AddToCartInTempData(product);
+                AddToCartInSession(product);
                 ViewBag.Message = $"Added {product.Name} to the cart.";
             }
             else
             {
                 ViewBag.Message = "Product not found.";
             }
-            List<Product> products = _context.Products.ToList();
-            var serializedCart = JsonConvert.SerializeObject(GetCartFromTempData());
-            TempData["Cart"] = serializedCart; // Store the serialized cart
 
+            // Set the cart in ViewBag so it can be accessed in the Index.cshtml view
+            ViewBag.Cart = GetCartFromSession();
+
+            List<Product> products = _context.Products.ToList();
             return View("Index", products);
         }
-         private List<Product> GetCartFromTempData()
+        private void AddToCartInSession(Product product)
         {
-            var serializedCart = TempData["Cart"] as string;
-            return string.IsNullOrEmpty(serializedCart) ? new List<Product>() : JsonConvert.DeserializeObject<List<Product>>(serializedCart);
-        }
-
-
-        private void AddToCartInTempData(Product product)
-        {
-            var cart = GetCartFromTempData();
+            var cart = GetCartFromSession();
             cart.Add(product);
-            TempData["Cart"] = cart;
+            SaveCartToSession(cart); // Save the updated cart to the session
+            Debug.WriteLine($"Added {product.Name} to cart. Current cart: {JsonConvert.SerializeObject(cart)}");
+            Console.WriteLine($"Added {product.Name} to cart. Current cart: {JsonConvert.SerializeObject(cart)}");
         }
+
+        private void SaveCartToSession(List<Product> cart)
+        {
+            var serializedCart = JsonConvert.SerializeObject(cart);
+            HttpContext.Session.SetString("Cart", serializedCart);
+        }
+        private List<Product> GetCartFromSession()
+        {
+            var cart = HttpContext.Session.GetString("Cart");
+            return string.IsNullOrEmpty(cart) ? new List<Product>() : JsonConvert.DeserializeObject<List<Product>>(cart);
+        }
+
+
+
     }
 }
