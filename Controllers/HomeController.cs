@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Net.Http;
 using webapp.Models;
 using webapp.Utils;
+using System.Text.Json; // Add this namespace
+using Humanizer;
 
 namespace webapp.Controllers
 {
@@ -34,14 +36,29 @@ namespace webapp.Controllers
         public ActionResult Index()
         {
             List<Product> products = _context.Products.ToList();
+            ViewBag.CartItemCount = GetCartItemCountFromSession(); // Pass the cart item count to the view
             return View(products);
         }
-        // Action method to display the AddToCart view
+        // Action method to display the ViewCart view
         public IActionResult ViewCart()
         {
             var cart = GetCartFromSession();
-            return View(cart);
+
+            // Group products by their ID
+            var groupedCart = cart.GroupBy(p => p.Id)
+                                  .Select(g => new Product
+                                  {
+                                      Id = g.Key,
+                                      Name = g.First().Name,
+                                      Price = g.First().Price,
+                                      Quantity = g.Count() // Count the quantity for each product in the cart
+                                  })
+                                  .ToList();
+
+            ViewBag.CartItemCount = groupedCart.Count; // Pass the cart item count to the view
+            return View(groupedCart);
         }
+
         // Action method to add a product to the shopping cart
         public IActionResult AddToCart(int id)
         {
@@ -57,11 +74,13 @@ namespace webapp.Controllers
             }
 
             // Set the cart in ViewBag so it can be accessed in the Index.cshtml view
-            ViewBag.Cart = GetCartFromSession();
+            //ViewBag.Cart = GetCartFromSession();
+            ViewBag.CartItemCount = GetCartItemCountFromSession(); // Pass the updated cart item count to the view
 
             List<Product> products = _context.Products.ToList();
             return View("Index", products);
         }
+
         // Action method to handle the form submission
         [HttpPost]
         public IActionResult Details(int id)
@@ -99,6 +118,11 @@ namespace webapp.Controllers
         {
             var cart = HttpContext.Session.GetString("Cart");
             return string.IsNullOrEmpty(cart) ? new List<Product>() : JsonConvert.DeserializeObject<List<Product>>(cart);
+        }
+        private int GetCartItemCountFromSession()
+        {
+            var cart = GetCartFromSession();
+            return cart?.Count ?? 0;
         }
     }
 }

@@ -25,6 +25,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Price</th>
+                    <th>Quantity</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,8 +34,16 @@
                     <tr>
                         <td>@Html.DisplayFor(modelItem => item.Name)</td>
                         <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                        <td>@item.Quantity</td>
                     </tr>
                 }
+
+                <tr>
+                    <td colspan="2" class="text-right">Total Price:</td>
+                    <td>
+                        @Model.Sum(p => p.Price * p.Quantity).ToString("C") <!-- Display the total price -->
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
