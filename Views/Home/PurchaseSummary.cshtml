@@ -1,7 +1,7 @@
-﻿@model IEnumerable<webapp.Models.Product>
+﻿@model IEnumerable<webapp.Models.CartItem>
 
 @{
-    ViewData["Title"] = "View Cart";
+    ViewData["Title"] = "Purchase Summary";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="container mt-4">
-        <h1>View Cart</h1>
+        <h1>Purchase Summary</h1>
 
         <p>
             <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Products</a>
@@ -26,25 +26,21 @@
                     <th>Name</th>
                     <th>Price</th>
                     <th>Quantity</th>
+                    <th>Total Price</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                        <td>@item.Product.Name</td>
+                        <td>@item.Product.Price</td>
                         <td>@item.Quantity</td>
+                        <td>@item.TotalPrice</td>
                     </tr>
                 }
             </tbody>
         </table>
-        <div class="text-right">
-            <form action="@Url.Action("Buy", "Home")" method="post">
-                <button type="submit" class="btn btn-primary">Buy All Items</button>
-            </form>
-        </div>
-
     </div>
 
     <!-- Add Bootstrap JS, jQuery, and Popper.js scripts here -->

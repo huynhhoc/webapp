@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapp.Models
 {
@@ -7,9 +8,13 @@ namespace webapp.Models
         [Key]
         public int Id { get; set; }
 
+        [ForeignKey("Product")]
         public int ProductId { get; set; }
-        public Product Product { get; set; } // Reference to the associated product
 
         public int Quantity { get; set; }
+
+        public Product Product { get; set; }
+
+        public decimal TotalPrice { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace webapp.Utils
     public interface IAppDbContext
     {
         DbSet<Product> Products { get; }
+        DbSet<CartItem> CartItems { get; set; }
         // Add other DbSet properties and IDbSet methods here if needed.
     }
 }

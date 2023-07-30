@@ -100,6 +100,38 @@ namespace webapp.Controllers
                 return RedirectToAction("Index");
             }
         }
+        // Action method to handle the purchase of all items in the cart
+        public IActionResult Buy()
+        {
+            // Get the cart from the session
+            var cart = GetCartFromSession();
+            Console.WriteLine("Buy..........");
+            // Save the cart items to the "CartItems" table in the database
+            foreach (var item in cart)
+            {
+                var cartItem = new CartItem
+                {
+                    ProductId = item.Id,
+                    Quantity = item.Quantity,
+                    TotalPrice = item.Price * item.Quantity,
+                    // You can also include the user ID if you have authentication and want to associate the cart items with the user
+                    // UserId = <User ID>
+                };
+                Console.WriteLine($"Item: {cartItem.ProductId}");
+
+                _context.CartItems.Add(cartItem);
+            }
+
+            // Save the changes to the database
+            ((AppDbContext)_context).SaveChanges();
+            // Clear the cart in the session since the purchase is complete
+            ClearCartInSession();
+
+            // Redirect to a "PurchaseSummary" view to display the details of the purchased items
+            return RedirectToAction("PurchaseSummary");
+        }
+
+
         private void AddToCartInSession(Product product)
         {
             var cart = GetCartFromSession();
@@ -124,5 +156,10 @@ namespace webapp.Controllers
             var cart = GetCartFromSession();
             return cart?.Count ?? 0;
         }
+        private void ClearCartInSession()
+        {
+            HttpContext.Session.Remove("Cart");
+        }
+
     }
 }

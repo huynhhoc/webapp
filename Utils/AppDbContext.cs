@@ -6,6 +6,7 @@ namespace webapp.Utils
     public class AppDbContext : DbContext, IAppDbContext
     {
         public DbSet<Product> Products { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
         // Add a constructor that accepts DbContextOptions
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -15,6 +16,10 @@ namespace webapp.Utils
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=app.db");
+        }
+        public void SaveChanges()
+        {
+            base.SaveChanges();
         }
     }
 }
