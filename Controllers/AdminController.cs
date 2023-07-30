@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.Threading.Tasks;
+
 using webapp.Models;
 using webapp.Utils;
 
@@ -56,14 +61,38 @@ namespace webapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price")] Product product)
+        public async Task<IActionResult> Create(Product product, IFormFile ImageData)
         {
+            // Debugging: Print the received file information
+            if (ImageData != null)
+            {
+                Console.WriteLine($"Received Image: {ImageData.FileName}, Size: {ImageData.Length} bytes, ContentType: {ImageData.ContentType}");
+            }
+            else
+            {
+                Console.WriteLine("No image data received.");
+            }
+
             if (ModelState.IsValid)
             {
+                // Handle the uploaded image if provided
+                if (ImageData != null && ImageData.Length > 0 && !string.IsNullOrEmpty(ImageData.ContentType))
+                {
+                    Console.WriteLine("Read the image data and store it in the ImageData property.");
+                    // Read the image data and store it in the ImageData property
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await ImageData.CopyToAsync(memoryStream);
+                        product.ImageData = memoryStream.ToArray();
+                        product.ImageMimeType = ImageData.ContentType;
+                    }
+                }
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(product);
         }
 
@@ -88,7 +117,7 @@ namespace webapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price")] Product product)
+        public async Task<IActionResult> Edit(int id, Product product, IFormFile ImageData)
         {
             if (id != product.Id)
             {
@@ -99,6 +128,30 @@ namespace webapp.Controllers
             {
                 try
                 {
+                    // Check if a new image was provided
+                    if (ImageData != null && ImageData.Length > 0 && !string.IsNullOrEmpty(ImageData.ContentType))
+                    {
+                        // New image provided, read the image data and store it in the product
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await ImageData.CopyToAsync(memoryStream);
+                            product.ImageData = memoryStream.ToArray();
+                            product.ImageMimeType = ImageData.ContentType;
+                        }
+                    }
+                    else
+                    {
+                        // New image was not provided, retrieve the existing product from the database
+                        var existingProduct = await _context.Products.FindAsync(id);
+                        if (existingProduct != null)
+                        {
+                            // Set the ImageData property to the previous value
+                            product.ImageData = existingProduct.ImageData;
+                            product.ImageMimeType = existingProduct.ImageMimeType;
+                        }
+                    }
+
+                    // Mark the product as modified and update it in the context
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
@@ -115,8 +168,10 @@ namespace webapp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(product);
         }
+
 
         // GET: Admin/Delete/5
         public async Task<IActionResult> Delete(int? id)

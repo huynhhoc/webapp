@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using webapp.Models;
 using webapp.Utils;
 
 #nullable disable
@@ -11,8 +10,8 @@ using webapp.Utils;
 namespace webapp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230725104814_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230730095519_UpdateImageDataNullable")]
+    partial class UpdateImageDataNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,12 +25,21 @@ namespace webapp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("ImageMimeType")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
