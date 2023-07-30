@@ -26,6 +26,7 @@
                     <th>Name</th>
                     <th>Price</th>
                     <th>Quantity</th>
+                    <th>Total Price</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,12 +36,26 @@
                         <td>@Html.DisplayFor(modelItem => item.Name)</td>
                         <td>@Html.DisplayFor(modelItem => item.Price)</td>
                         <td>@item.Quantity</td>
+                        <td>@(item.Price * item.Quantity)</td>
                     </tr>
                 }
+
+                <!-- Add the row to display the total sum -->
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                    <td>
+                        @Model.Sum(item => item.Price * item.Quantity) <!-- Calculate and display the total sum -->
+                    </td>
+                </tr>
             </tbody>
         </table>
+
         <div class="text-right">
             <form action="@Url.Action("Buy", "Home")" method="post">
+                @foreach (var item in Model)
+                {
+                    <input type="hidden" name="cartItemId" value="@item.Id" />
+                }
                 <button type="submit" class="btn btn-primary">Buy All Items</button>
             </form>
         </div>

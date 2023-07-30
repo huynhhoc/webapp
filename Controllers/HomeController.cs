@@ -7,6 +7,7 @@ using webapp.Models;
 using webapp.Utils;
 using System.Text.Json; // Add this namespace
 using Humanizer;
+using Microsoft.EntityFrameworkCore;
 
 namespace webapp.Controllers
 {
@@ -124,21 +125,25 @@ namespace webapp.Controllers
 
             // Save the changes to the database
             ((AppDbContext)_context).SaveChanges();
+            //await _context.SaveChangesAsync();
             // Clear the cart in the session since the purchase is complete
             ClearCartInSession();
 
             // Redirect to a "PurchaseSummary" view to display the details of the purchased items
             return RedirectToAction("PurchaseSummary");
         }
-
+        public IActionResult PurchaseSummary()
+        {
+            // Get the purchased cart items from the database
+            var purchasedCartItems = _context.CartItems.Include(ci => ci.Product).ToList();
+            return View(purchasedCartItems);
+        }
 
         private void AddToCartInSession(Product product)
         {
             var cart = GetCartFromSession();
             cart.Add(product);
             SaveCartToSession(cart); // Save the updated cart to the session
-            Debug.WriteLine($"Added {product.Name} to cart. Current cart: {JsonConvert.SerializeObject(cart)}");
-            Console.WriteLine($"Added {product.Name} to cart. Current cart: {JsonConvert.SerializeObject(cart)}");
         }
 
         private void SaveCartToSession(List<Product> cart)

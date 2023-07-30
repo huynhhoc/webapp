@@ -17,9 +17,32 @@ namespace webapp.Utils
         {
             optionsBuilder.UseSqlite("Data Source=app.db");
         }
-        public void SaveChanges()
+        // Override SaveChanges method to save CartItems
+        public override int SaveChanges()
         {
-            base.SaveChanges();
+            // Get the entities that are in Added or Modified state
+            var modifiedEntities = ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
+                .Select(e => e.Entity)
+                .ToList();
+
+            // Loop through each modified entity
+            foreach (var entity in modifiedEntities)
+            {
+                // If the entity is a CartItem, update its TotalPrice property before saving
+                if (entity is CartItem cartItem)
+                {
+                    Console.WriteLine($"save cart item: {cartItem.ProductId}");
+                    var product = Products.Find(cartItem.ProductId);
+                    if (product != null)
+                    {
+                        cartItem.TotalPrice = cartItem.Quantity * product.Price;
+                    }
+                }
+            }
+
+            // Save the changes to the database
+            return base.SaveChanges();
         }
     }
 }
