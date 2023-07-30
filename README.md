@@ -16,9 +16,17 @@ Home Page: Displays a list of available products for users to browse.
 
 <img align="center" width="600"  src="./Images/homepage.jpg">
 
+Edit product Page: Edit a selected product
+
+<img align="center" width="600"  src="./Images/edit.jpg">
+
 ViewCart Page: Displays a list of selected products
 
 <img align="center" width="600"  src="./Images/viewcart.jpg">
+
+Purchase summary Page: Displays a summary of purchase
+
+<img align="center" width="600"  src="./Images/summary.jpg">
 
 
 # Database Setup
