@@ -27,6 +27,7 @@
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Total Price</th>
+                    <th>Actions</th> <!-- Add a new column for actions -->
                 </tr>
             </thead>
             <tbody>
@@ -37,12 +38,16 @@
                         <td>@Html.DisplayFor(modelItem => item.Price)</td>
                         <td>@item.Quantity</td>
                         <td>@(item.Price * item.Quantity)</td>
+                        <td>
+                            <!-- Add a "Reduce" button for each product -->
+                            <a href="#" class="btn btn-danger reduceCartItem" data-product-id="@item.Id"> - </a>
+                        </td>
                     </tr>
                 }
 
                 <!-- Add the row to display the total sum -->
                 <tr>
-                    <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                    <td colspan="4" class="text-right"><strong>Total:</strong></td>
                     <td>
                         @Model.Sum(item => item.Price * item.Quantity) <!-- Calculate and display the total sum -->
                     </td>
@@ -65,5 +70,43 @@
     <!-- Add Bootstrap JS, jQuery, and Popper.js scripts here -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Add Lodash library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".reduceCartItem").on("click", function (e) {
+                e.preventDefault();
+                var button = $(this);
+                var productId = button.data("product-id");
+
+                // Disable the button to prevent multiple clicks while the AJAX request is ongoing
+                button.prop("disabled", true);
+
+                $.ajax({
+                    url: "/Home/ReduceCartItem",
+                    type: "POST",
+                    data: { id: productId },
+                    success: function (data) {
+                        if (data.success) {
+                            // Reload the page to update the cart view
+                            location.reload();
+                        } else {
+                            console.log(data.message); // Log the error message to the console
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    },
+                    complete: function () {
+                        // Enable the button again after the AJAX request is complete
+                        button.prop("disabled", false);
+                    }
+                });
+            });
+        });
+    </script>
+
+
 </body>
 </html>

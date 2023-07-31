@@ -138,7 +138,48 @@ namespace webapp.Controllers
             var purchasedCartItems = _context.CartItems.Include(ci => ci.Product).ToList();
             return View(purchasedCartItems);
         }
+        [HttpPost]
+        public IActionResult ReduceCartItem(int id)
+        {
+            var product = _context.Products.Find(id);
+            if (product != null)
+            {
+                var cart = GetCartFromSession();
 
+                // Check if the product is already in the cart
+                var cartItem = cart.FirstOrDefault(item => item.Id == product.Id);
+                if (cartItem != null)
+                {
+                    // Decrease the cart item quantity by 1
+                    cartItem.Quantity--;
+
+                    // Increase the product quantity by 1
+                    product.Quantity++;
+
+                    // If the cart item quantity reaches 0, remove it from the cart
+                    if (cartItem.Quantity <= 0)
+                    {
+                        cart.Remove(cartItem);
+                    }
+
+                    // Update the product quantity in the database
+                    //_context.SaveChanges();
+
+                    SaveCartToSession(cart); // Save the updated cart to the session
+
+                    // Return a JSON response to indicate the success
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false, message = $"{product.Name} is not in the cart." });
+                }
+            }
+            else
+            {
+                return Json(new { success = false, message = "Product not found." });
+            }
+        }
         private void AddToCartInSession(Product product)
         {
             var cart = GetCartFromSession();
