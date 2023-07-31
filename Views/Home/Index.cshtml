@@ -26,20 +26,30 @@
             </div>
         </div>
 
-        <ul class="list-group">
+        <div class="row">
             @foreach (var product in Model)
             {
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span>@product.Name</span>
-                    <span class="badge badge-primary badge-pill text-center">@product.Price</span>
-                    <a href="#" class="btn btn-primary addToCart" data-product-id="@product.Id">Add to Cart</a>
-                    <form action="@Url.Action("Details", "Home")" method="post">
-                        <input type="hidden" name="id" value="@product.Id" />
-                        <button type="submit" class="btn btn-primary">Details...</button>
-                    </form>
-                </li>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        @if (product.ImageData != null && product.ImageMimeType != null)
+                        {
+                            <img src="data:@product.ImageMimeType;base64,@Convert.ToBase64String(product.ImageData)" class="card-img-top" alt="@product.Name">
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">Price: @product.Price</p>
+                            <div class="d-flex justify-content-between">
+                                <a href="#" class="btn btn-primary addToCart" data-product-id="@product.Id">Add to Cart</a>
+                                <form action="@Url.Action("Details", "Home")" method="post">
+                                    <input type="hidden" name="id" value="@product.Id" />
+                                    <button type="submit" class="btn btn-primary">Details...</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-        </ul>
+        </div>
     </div>
 
     <!-- Add Bootstrap JS and jQuery scripts here -->
